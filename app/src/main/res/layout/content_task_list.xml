@@ -12,4 +12,9 @@
     tools:context="com.pouya11.tasklistfromweb.TaskListActivity"
     tools:showIn="@layout/app_bar_task_list">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lst_task_list"/>
+
 </RelativeLayout>

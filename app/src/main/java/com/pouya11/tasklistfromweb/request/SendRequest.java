@@ -19,25 +19,34 @@ import java.util.Map;
  * this class will send post and get requests
  */
 public class SendRequest {
-     public static void get(JSONObject request, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, Context context){
-         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
-                 JsonObjectRequest.Method.GET,
-                 StaticValues.TASK_ROUTE,
-                 request,
-                 listener,
-                 errorListener);
-         RequestQueue queue = Volley.newRequestQueue(context);
+    public static void get(
+         JSONObject request,
+         Response.Listener<JSONObject> listener,
+         Response.ErrorListener errorListener,
+         Context context,
+         String url
+    ) {
+     JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+             JsonObjectRequest.Method.GET,
+             url,
+             request,
+             listener,
+             errorListener);
+     RequestQueue queue = Volley.newRequestQueue(context);
 
-         queue.add(jsObjRequest);
-     }
+     queue.add(jsObjRequest);
+    }
 
-    public static void post(JSONObject request,
-                            Response.Listener<JSONObject> listener,
-                            Response.ErrorListener errorListener,
-                            Context context) {
+    public static void post(
+            JSONObject request,
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            Context context,
+            String url
+    ) {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 JsonObjectRequest.Method.POST,
-                StaticValues.OAUTH_TOKEN,
+                url,
                 request,
                 listener,
                 errorListener);
@@ -46,10 +55,46 @@ public class SendRequest {
         queue.add(jsObjRequest);
     }
 
-    public static void postWithToken(JSONObject request,
-                            Response.Listener<JSONObject> listener,
-                            Response.ErrorListener errorListener,
-                            Context context) {
+    public static void getWithToken(
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            Context context,
+            String url
+    ) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences("com.pouya11.tasklistfromweb",Context.MODE_PRIVATE);
+        final String token_type = sharedPreferences.getString("token_type", "");
+        final String access_token = sharedPreferences.getString("access_token", "");
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                JsonObjectRequest.Method.GET,
+                url,
+                null,
+                listener,
+                errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", token_type + " " + access_token);
+
+                return headers;
+            }
+        };
+
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        queue.add(jsObjRequest);
+    }
+
+    public static void postWithToken(
+            JSONObject request,
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            Context context,
+            String url
+    ) {
 
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences("com.pouya11.tasklistfromweb",Context.MODE_PRIVATE);
@@ -58,7 +103,7 @@ public class SendRequest {
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 JsonObjectRequest.Method.POST,
-                StaticValues.TASK_ROUTE,
+                url,
                 request,
                 listener,
                 errorListener){

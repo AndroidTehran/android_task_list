@@ -61,16 +61,4 @@ public class Auth {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public JSONObject toJsonObject() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("grant_type", this.grantType);
-        jsonObject.put("client_id", this.clientId);
-        jsonObject.put("client_secret", this.clientSecret);
-        jsonObject.put("username", this.username);
-        jsonObject.put("password", this.password);
-
-        return jsonObject;
-    }
 }

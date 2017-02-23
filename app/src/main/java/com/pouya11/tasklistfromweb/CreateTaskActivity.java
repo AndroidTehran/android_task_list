@@ -8,7 +8,10 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.pouya11.tasklistfromweb.models.Task;
 import com.pouya11.tasklistfromweb.request.SendRequest;
+import com.pouya11.tasklistfromweb.services.CreateTaskService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,38 +31,15 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     public void btnSaveClicked(View view) {
-        String title = txtTitle.getText().toString();
-        String description = txtDescription.getText().toString();
+        Task task = new Task(
+                txtTitle.getText().toString(),
+                txtDescription.getText().toString()
+        );
 
-        JSONObject request = new JSONObject();
         try {
-            request.put("title", title);
-            request.put("description", description);
-
-            SendRequest.postWithToken(request,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Toast.makeText(CreateTaskActivity.this,
-                                    "Created successfully",
-                                    Toast.LENGTH_SHORT).show();
-
-                            finish();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(CreateTaskActivity.this,
-                                    "Not created",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    CreateTaskActivity.this
-            );
+            CreateTaskService.store(task, this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }
