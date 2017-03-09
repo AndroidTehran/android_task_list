@@ -1,6 +1,8 @@
 package com.pouya11.tasklistfromweb.models;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.pouya11.tasklistfromweb.request.StaticValues;
 
 import org.json.JSONException;
@@ -8,12 +10,27 @@ import org.json.JSONObject;
 
 /**
  * Created by Mohammad on 16/02/2017.
+ * this class is for authentication by php
  */
 public class Auth {
+    @SerializedName("grant_type")
+    @Expose
     private String grantType;
+
+    @SerializedName("client_id")
+    @Expose
     private int clientId;
+
+    @SerializedName("client_secret")
+    @Expose
     private String clientSecret;
+
+    @SerializedName("username")
+    @Expose
     private String username;
+
+    @SerializedName("password")
+    @Expose
     private String password;
 
 
