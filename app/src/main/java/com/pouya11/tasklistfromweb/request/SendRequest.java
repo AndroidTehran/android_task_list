@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -123,5 +124,37 @@ public class SendRequest {
         queue.add(jsObjRequest);
     }
 
+    public static void putWithToken(
+            JSONObject request,
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            Context context,
+            String url
+    ) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences("com.pouya11.tasklistfromweb",Context.MODE_PRIVATE);
+        final String token_type = sharedPreferences.getString("token_type", "");
+        final String access_token = sharedPreferences.getString("access_token", "");
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                JsonObjectRequest.Method.PUT,
+                url,
+                request,
+                listener,
+                errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", token_type + " " + access_token);
+
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        queue.add(jsObjRequest);
+    }
 
 }
