@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pouya11.tasklistfromweb.R;
 import com.pouya11.tasklistfromweb.TaskListActivity;
 import com.pouya11.tasklistfromweb.adapters.TaskListAdapter;
@@ -29,7 +30,9 @@ public class TaskListService {
                     public void onResponse(JSONObject response) {
                         String jsonString = response.toString();
                         Gson gson = new Gson();
-                        Pagination<Task> tasks = gson.fromJson(jsonString, new Pagination<Task>().getClass());
+
+                        Pagination<Task> tasks = gson.fromJson(jsonString, new TypeToken<Pagination<Task>>() {
+                        }.getType());
                         List<Task> taskList = tasks.getData();
 
                         taskListActivity.getLstTaskList().setAdapter(
